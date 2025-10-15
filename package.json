@@ -1,0 +1,21 @@
+{
+  "name": "08-skillify-backend",
+  "author": "Elias Chen",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run index.ts",
+    "dev": "bun run --watch index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "bun-pty": "^0.3.2",
+    "hono": "^4.9.10"
+  }
+}
