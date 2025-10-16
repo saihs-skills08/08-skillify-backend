@@ -5,6 +5,10 @@ import { cp, mkdir, rm } from "node:fs/promises";
 
 const app = new Hono();
 
+const ktWarning = `
+OpenJDK 64-Bit Server VM warning: Options -Xverify:none and -noverify were deprecated in JDK 13 and will likely be removed in a future release.
+`.trim();
+
 app.get(
   "/:language",
   upgradeWebSocket(async (c) => {
@@ -30,13 +34,16 @@ app.get(
             name: folderName,
             cwd: folderPath,
           });
-          shell.onData((data: any) => {
-            ws.send(
-              JSON.stringify({
-                type: "shell",
-                data: data,
-              } as ShellResponse),
-            );
+          shell.onData((data: string) => {
+            console.log(data);
+            if (!data.trim().includes(ktWarning)) {
+              ws.send(
+                JSON.stringify({
+                  type: "shell",
+                  data: data,
+                } as ShellResponse),
+              );
+            }
           });
           shell.onExit(async () => {
             await rm(folderPath, { recursive: true, force: true });

@@ -13,11 +13,11 @@ RUN apt update && apt install -y \
     libncursesw6 \
     libz-dev \
     libuv1 \
-    openjdk-17-jdk \
+    openjdk-21-jdk \
     kotlin \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 RUN curl -fsSL https://bun.sh/install | bash && \
