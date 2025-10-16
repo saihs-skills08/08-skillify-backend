@@ -1,3 +1,5 @@
+#!/bin/bash
+
 lang=$1
 file=$2
 if [ $lang == "java" ]
