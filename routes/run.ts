@@ -35,7 +35,6 @@ app.get(
             cwd: folderPath,
           });
           shell.onData((data: string) => {
-            console.log(data);
             if (!data.trim().includes(ktWarning)) {
               ws.send(
                 JSON.stringify({
