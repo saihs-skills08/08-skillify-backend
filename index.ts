@@ -2,11 +2,21 @@ import { Hono } from "hono";
 import { createBunWebSocket } from "hono/bun";
 import { spawn } from "bun-pty";
 import { mkdir, rm } from "node:fs/promises";
-import { cwd } from "node:process";
 import RunRoute from "./routes/run";
+import FormatRoute from "./routes/formatter";
 
 const { upgradeWebSocket, websocket } = createBunWebSocket();
 const app = new Hono();
+
+app.use("*", async (c, next) => {
+  c.header("Access-Control-Allow-Origin", "*");
+  c.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  c.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (c.req.method === "OPTIONS") {
+    return c.text("OK", 200);
+  }
+  await next();
+});
 
 console.log("--08 Skillify backend");
 console.log("Server is running on http://localhost:8000");
@@ -23,6 +33,7 @@ const folderSetup = async () => {
 app.get("/", (c) => c.text("08 Skillify Backend"));
 
 app.route("/run", RunRoute);
+app.route("/format", FormatRoute);
 
 app.get(
   "/shell",
