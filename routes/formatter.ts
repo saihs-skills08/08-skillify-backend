@@ -19,14 +19,20 @@ app.post("/:language", async (c) => {
   Bun.write(filePath, code);
 
   const formatter = language === "java" ? "javafmt.jar" : "ktfmt.jar";
-  await $`java -jar ./formatters/${formatter} ${language === "java" && "--replace"} ${filePath}`.quiet();
+  try {
+    await $`java -jar ./formatters/${formatter} ${
+      language === "java" && "--replace"
+    } ${filePath}`.quiet();
+  } catch (e) {
+    console.error(e);
+  }
   const formattedCode = Bun.file(filePath);
 
   return c.text(
     await formattedCode.text().finally(async () => {
       await rm(dir, { recursive: true, force: true });
     }),
-    200,
+    200
   );
 });
 export default app;
